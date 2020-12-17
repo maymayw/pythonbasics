@@ -1,0 +1,27 @@
+1. install scrapy
+pip install scrapy
+
+2. create project
+scrapy startproject ProName
+cd ProName
+
+3. generate spider
+scrapy genspider spiderName www.domain.com
+
+4. common settings.py
+# Crawl responsibly by identifying yourself (and your website) on the user-agent
+USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36'
+
+# log level
+LOG_LEVEL = 'ERROR'
+
+# Obey robots.txt rules
+ROBOTSTXT_OBEY = False
+
+5. start coding the spider class
+comment out
+    #allowed_domains = ['www.flightaware.com']
+the list of start_urls will be requested one by one by the spider
+    start_urls = ['https://www.flightaware.com/']
+
+

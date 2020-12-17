@@ -1,0 +1,41 @@
+1. install selenium
+pip install selenium
+
+2. decide browser type and find out its driver version
+example I use Brave -> About Brave
+Brave is up to date
+Version 1.15.76 Chromium: 86.0.4240.111 (Official Build) (64-bit)
+
+https://www.selenium.dev/documentation/en/getting_started_with_webdriver/browsers/
+select Chromium
+https://sites.google.com/a/chromium.org/chromedriver/
+select Downloads
+https://sites.google.com/a/chromium.org/chromedriver/downloads
+based on my Brave browser Chromium version, download ChromeDriver 86.0.4240.22
+save it crhomedriver.exe to local directory
+
+from time import sleep
+import time
+from selenium import webdriver
+from selenium.webdriver import chrome
+from selenium.webdriver import ChromeOptions
+
+# settings from Brave browser
+options = ChromeOptions()
+options.binary_location = 'C:\\Program Files (x86)\\BraveSoftware\Brave-Browser\\Application\\brave.exe'
+
+# anti selenium detection
+options.add_experimental_option('excludeSwitches', ['enable-automation'])
+
+driver_path = './chromedriver.exe'
+braveBro = webdriver.Chrome(options=options, executable_path=driver_path)
+
+braveBro.get('http://www.google.com')
+sleep(5)
+braveBro.quit()
+
+
+3. for a headless browser (无界面) add argument 'headless' to options or use phantomjs(deprecated)
+download https://phantomjs.org/download.html and unzip phantomjs.exe to local directory
+
+
