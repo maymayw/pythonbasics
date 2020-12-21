@@ -1,10 +1,11 @@
 import scrap_html_to_pdf as s
 import requests
 from lxml import etree
+import re
 
-my_scrapper = s.Scrapper()
+my_scrapper = s.Scrapper(dest='C:/Users/may/Documents/leisure/tianguancifu/')
 
-start_url = 'https://book.apeland.cn'
+start_url = 'https://www.kunnu.com/tianguancifu'
 # Pack the request parameters
 # Query String Parameters for a static page
 # For a dynamic content page using ajax query, filter XHR
@@ -33,11 +34,21 @@ headers = {
 # General -> Request Method
 response = requests.get(url=start_url, params=param, headers=headers).text
 tree = etree.HTML(response)
-urls = tree.xpath('/html/body/div/div/div[1]/ul/li//li')
+urls = tree.xpath('/html/body/div/div/ul/li')
+paths_to_drop = ('<div id="comments"[\S\s]*<!-- #comments -->',)
+my_scrapper.set_tailor(paths_to_drop)
 
 pages = {}
 for u in urls:
-    add = start_url + u.xpath('./a/@href')[0]
-    title = u.xpath('./a//text()')[0].replace('\n', '').replace('\t', '').replace(' ', '')
-    pages[title] = add
-    my_scrapper.scrap(pages)
+    try:
+        add = u.xpath('./a/@href')[0]
+        title = u.xpath('./a//text()')[0].replace('\n', '').replace('\t', '').replace(' ', '')
+    except IndexError:
+        link = re.findall('http.*htm', u.xpath('./b/@onclick')[0])[0]
+        add = link
+        title = u.xpath('./b//text()')[0].replace('\n', '').replace('\t', '').replace(' ', '')
+    finally:
+        print(add + ' ' + title)
+        pages[title] = add
+# pages = {'引':'https://www.kunnu.com/meizhe/79400.htm',}
+my_scrapper.scrap(pages)
